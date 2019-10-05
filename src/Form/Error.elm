@@ -25,6 +25,10 @@ type ErrorValue e
     | InvalidInt
     | InvalidFloat
     | InvalidBool
+    | InvalidDate
+    | InvalidAmount
+    | InvalidAccountNr
+    | NoneSelected
     | SmallerIntThan Int
     | GreaterIntThan Int
     | SmallerFloatThan Float

@@ -92,6 +92,30 @@ selectInput options state attrs =
     in
     select (formAttrs ++ attrs) (List.map buildOption options)
 
+{-| Select input organized in groups.
+-}
+groupedSelectInput : List (Option GroupedRadio) -> Input e String
+groupedSelectInput options state attrs =
+    let
+      formAttrs =
+          [ on
+              "change"
+              (targetValue |> Json.map (String >> Input state.path Select))
+          , onFocus (Focus state.path)
+          , onBlur (Blur state.path)
+          ]
+    in
+      select (formAttrs ++ attrs) (List.map (buildGroupedOptions state.value) options)
+
+buildGroupedOptions : Maybe String ->  Option GroupedRadio -> Html Msg
+buildGroupedOptions maybeSelectedValue groupedOptions =
+  let
+    buildOption radioOption =
+      option [ value (Option.idAsString radioOption), selected (maybeSelectedValue == Just (Option.idAsString radioOption))] [ text (Option.value radioOption) ]
+
+  in
+  optgroup [attribute "label" (Option.name groupedOptions)]
+    (List.map buildOption (Option.subs groupedOptions))
 
 {-| Checkbox input.
 -}
